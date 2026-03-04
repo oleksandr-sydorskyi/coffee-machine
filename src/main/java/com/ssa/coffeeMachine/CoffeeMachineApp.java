@@ -6,14 +6,13 @@ public class CoffeeMachineApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        CoffeeMachine machine = new CoffeeMachine();
 
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-
-        String action;
-        do {
-            System.out.println("Write action (buy, fill, take, remaining, exit): ");
+        while (true) {
+            System.out.println("Write action (buy, fill, take, clean, remaining, exit):");
             System.out.print("> ");
-            action = scanner.nextLine();
+            String action = scanner.nextLine();
+
             switch (action) {
                 case "buy":
                     machine.buy(scanner);
@@ -27,12 +26,14 @@ public class CoffeeMachineApp {
                 case "remaining":
                     machine.printState();
                     break;
-                case "exit":
+                case "clean":
+                    machine.clean();
                     break;
+                case "exit":
+                    return;
                 default:
                     System.out.println("Unknown action");
             }
-        } while (!action.equals("exit"));
-
+        }
     }
 }
