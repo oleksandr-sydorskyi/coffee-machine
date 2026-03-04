@@ -2,40 +2,75 @@ package com.ssa.coffeeMachine;
 
 import java.util.Scanner;
 
-public class CoffeeMachine {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+class CoffeeMachine {
 
-        System.out.println("Write how many ml of water the coffee machine has:");
-        System.out.print("> ");
-        int availableWater = scanner.nextInt();
+    private int water;
+    private int milk;
+    private int beans;
+    private int cups;
+    private int money;
 
-        System.out.println("Write how many ml of milk the coffee machine has:");
-        System.out.print("> ");
-        int availableMilk = scanner.nextInt();
+    public CoffeeMachine(int water, int milk, int beans, int cups, int money) {
+        this.water = water;
+        this.milk = milk;
+        this.beans = beans;
+        this.cups = cups;
+        this.money = money;
+    }
 
-        System.out.println("Write how many grams of coffee beans the coffee machine has:");
-        System.out.print("> ");
-        int availableBeans = scanner.nextInt();
+    public void buy(Scanner scanner) {
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
+        int choice = scanner.nextInt();
 
-        System.out.println("Write how many cups of coffee you will need:");
-        System.out.print("> ");
-        int neededCups = scanner.nextInt();
-
-        int maxCupsWater = availableWater / 200;
-        int maxCupsMilk = availableMilk / 50;
-        int maxCupsBeans = availableBeans / 15;
-
-        int maximumPossibleCups = Math.min(maxCupsWater, Math.min(maxCupsMilk, maxCupsBeans));
-
-        if (neededCups == maximumPossibleCups) {
-            System.out.println("Yes, I can make that amount of coffee");
-        } else if (maximumPossibleCups > neededCups) {
-            int extraCups = maximumPossibleCups - neededCups;
-            System.out.println("Yes, I can make that amount of coffee (and even " + extraCups + " more than that)");
-        } else {
-            System.out.println("No, I can make only " + maximumPossibleCups + " cup(s) of coffee");
+        switch (choice) {
+            case 1:
+                makeCoffee(250, 0, 16, 4);
+                break;
+            case 2:
+                makeCoffee(350, 75, 20, 7);
+                break;
+            case 3:
+                makeCoffee(200, 100, 12, 6);
+                break;
+            default:
+                System.out.println("Invalid choice");
         }
+    }
+
+    private void makeCoffee(int waterNeeded, int milkNeeded, int beansNeeded, int price) {
+        water -= waterNeeded;
+        milk -= milkNeeded;
+        beans -= beansNeeded;
+        cups--;
+        money += price;
+    }
+
+    public void fill(Scanner scanner) {
+        System.out.println("Write how many ml of water you want to add: ");
+        water += scanner.nextInt();
+
+        System.out.println("Write how many ml of milk you want to add: ");
+        milk += scanner.nextInt();
+
+        System.out.println("Write how many grams of coffee beans you want to add: ");
+        beans += scanner.nextInt();
+
+        System.out.println("Write how many disposable cups you want to add: ");
+        cups += scanner.nextInt();
+    }
+
+    public void take() {
+        System.out.println("I gave you $" + money);
+        money = 0;
+    }
+
+    public void printState() {
+        System.out.println("\nThe coffee machine has:");
+        System.out.println(water + " ml of water");
+        System.out.println(milk + " ml of milk");
+        System.out.println(beans + " g of coffee beans");
+        System.out.println(cups + " disposable cups");
+        System.out.println("$" + money + " of money\n");
     }
 }
 
