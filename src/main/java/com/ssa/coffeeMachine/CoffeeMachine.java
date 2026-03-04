@@ -1,7 +1,5 @@
 package com.ssa.coffeeMachine;
 
-import java.util.Scanner;
-
 class CoffeeMachine {
     private int water;
     private int milk;
@@ -10,10 +8,6 @@ class CoffeeMachine {
     private int money;
     private int cupsMade;
     private static final int CLEANING_THRESHOLD = 10;
-
-    public CoffeeMachine() {
-        this(400, 540, 120, 9, 550);
-    }
 
     public CoffeeMachine(int water, int milk, int beans, int cups, int money) {
         this.water = water;
@@ -24,51 +18,25 @@ class CoffeeMachine {
         this.cupsMade = 0;
     }
 
-    public void buy(Scanner scanner) {
-
+    // Логіка купівлі тепер повертає Enum замість друку в консоль
+    public BuyResult buy(String choice) {
         if (cupsMade >= CLEANING_THRESHOLD) {
-            System.out.println("I need cleaning!");
-            return;
+            return BuyResult.NEEDS_CLEANING;
         }
 
-        System.out.println(
-                "\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
-        System.out.print("> ");
-        String choice = scanner.nextLine();
-
-        if (choice.equals("back")) {
-            return;
-        }
+        if ("back".equals(choice)) return BuyResult.SUCCESS;
 
         Coffee coffee = Coffee.fromChoice(choice);
-        if (coffee == null) {
-            System.out.println("Invalid choice");
-            return;
-        }
+        if (coffee == null) return BuyResult.INVALID_CHOICE;
 
-        makeCoffee(coffee);
+        return makeCoffee(coffee);
     }
 
-    private void makeCoffee(Coffee coffee) {
-
-        if (water < coffee.water()) {
-            System.out.println("Sorry, not enough water!\n");
-            return;
-        }
-        if (milk < coffee.milk()) {
-            System.out.println("Sorry, not enough milk!");
-            return;
-        }
-        if (beans < coffee.beans()) {
-            System.out.println("Sorry, not enough coffee beans!");
-            return;
-        }
-        if (cups < 1) {
-            System.out.println("Sorry, not enough disposable cups!");
-            return;
-        }
-
-        System.out.println("I have enough resources, making you a coffee!\n");
+    private BuyResult makeCoffee(Coffee coffee) {
+        if (water < coffee.water()) return BuyResult.NOT_ENOUGH_WATER;
+        if (milk < coffee.milk()) return BuyResult.NOT_ENOUGH_MILK;
+        if (beans < coffee.beans()) return BuyResult.NOT_ENOUGH_BEANS;
+        if (cups < 1) return BuyResult.NOT_ENOUGH_CUPS;
 
         water -= coffee.water();
         milk -= coffee.milk();
@@ -76,46 +44,33 @@ class CoffeeMachine {
         cups--;
         money += coffee.price();
         cupsMade++;
+
+        return BuyResult.SUCCESS;
     }
 
-    public void fill(Scanner scanner) {
-        System.out.println("\nWrite how many ml of water you want to add:");
-        System.out.print("> ");
-        water += Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Write how many ml of milk you want to add:");
-        System.out.print("> ");
-        milk += Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Write how many grams of coffee beans you want to add:");
-        System.out.print("> ");
-        beans += Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Write how many disposable cups you want to add:");
-        System.out.print("> ");
-        cups += Integer.parseInt(scanner.nextLine());
+    public void fill(int addWater, int addMilk, int addBeans, int addCups) {
+        this.water += addWater;
+        this.milk += addMilk;
+        this.beans += addBeans;
+        this.cups += addCups;
     }
 
-    public void take() {
-        System.out.println("I gave you $" + money);
+    public int take() {
+        int amount = money;
         money = 0;
+        return amount;
     }
 
     public void clean() {
         cupsMade = 0;
-        System.out.println("I have been cleaned!");
     }
 
-    public void printState() {
-        System.out.printf("""
-
-            The coffee machine has:
-            %d ml of water
-            %d ml of milk
-            %d g of coffee beans
-            %d disposable cups
-            $%d of money
-            
-            """, water, milk, beans, cups, money);
-    }
+    // Гетери для тестів
+    public int getWater() { return water; }
+    public int getMilk() { return milk; }
+    public int getBeans() { return beans; }
+    public int getCups() { return cups; }
+    public int getMoney() { return money; }
+    public int getCupsMade() { return cupsMade; }
+    public boolean needsCleaning() { return cupsMade >= CLEANING_THRESHOLD; }
 }
