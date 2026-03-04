@@ -19,48 +19,75 @@ class CoffeeMachine {
     }
 
     public void buy(Scanner scanner) {
-        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
-        int choice = scanner.nextInt();
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino (or write - back - to return into the main menu): ");
+        System.out.print("> ");
+        String choice = scanner.nextLine();
 
         switch (choice) {
-            case 1:
+            case "1":
                 makeCoffee(250, 0, 16, 4);
                 break;
-            case 2:
+            case "2":
                 makeCoffee(350, 75, 20, 7);
                 break;
-            case 3:
+            case "3":
                 makeCoffee(200, 100, 12, 6);
                 break;
+            case "back":
+                return;
             default:
                 System.out.println("Invalid choice");
         }
     }
 
     private void makeCoffee(int waterNeeded, int milkNeeded, int beansNeeded, int price) {
+        if (water < waterNeeded) {
+            System.out.println("Sorry, not enough water!");
+            return;
+        }
+        if (milk < milkNeeded) {
+            System.out.println("Sorry, not enough milk!");
+            return;
+        }
+        if (beans < beansNeeded) {
+            System.out.println("Sorry, not enough coffee beans!");
+            return;
+        }
+        if (cups < 1) {
+            System.out.println("Sorry, not enough disposable cups!");
+            return;
+        }
+
+        System.out.println("I have enough resources, making you a coffee!\n");
+
         water -= waterNeeded;
         milk -= milkNeeded;
         beans -= beansNeeded;
         cups--;
         money += price;
+
     }
 
     public void fill(Scanner scanner) {
         System.out.println("Write how many ml of water you want to add: ");
-        water += scanner.nextInt();
+        System.out.print("> ");
+        water += Integer.parseInt(scanner.nextLine());
 
         System.out.println("Write how many ml of milk you want to add: ");
-        milk += scanner.nextInt();
+        System.out.print("> ");
+        milk += Integer.parseInt(scanner.nextLine());
 
         System.out.println("Write how many grams of coffee beans you want to add: ");
-        beans += scanner.nextInt();
+        System.out.print("> ");
+        beans += Integer.parseInt(scanner.nextLine());
 
         System.out.println("Write how many disposable cups you want to add: ");
-        cups += scanner.nextInt();
+        System.out.print("> ");
+        cups += Integer.parseInt(scanner.nextLine());
     }
 
     public void take() {
-        System.out.println("I gave you $" + money);
+        System.out.println("\nI gave you $" + money + "\n");
         money = 0;
     }
 
@@ -73,4 +100,3 @@ class CoffeeMachine {
         System.out.println("$" + money + " of money\n");
     }
 }
-

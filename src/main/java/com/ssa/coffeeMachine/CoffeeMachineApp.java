@@ -9,25 +9,30 @@ public class CoffeeMachineApp {
 
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
 
-        machine.printState();
+        String action;
+        do {
+            System.out.println("Write action (buy, fill, take, remaining, exit): ");
+            System.out.print("> ");
+            action = scanner.nextLine();
+            switch (action) {
+                case "buy":
+                    machine.buy(scanner);
+                    break;
+                case "fill":
+                    machine.fill(scanner);
+                    break;
+                case "take":
+                    machine.take();
+                    break;
+                case "remaining":
+                    machine.printState();
+                    break;
+                case "exit":
+                    break;
+                default:
+                    System.out.println("Unknown action");
+            }
+        } while (!action.equals("exit"));
 
-        System.out.println("Write action (buy, fill, take): ");
-        String action = scanner.nextLine();
-
-        switch (action) {
-            case "buy":
-                machine.buy(scanner);
-                break;
-            case "fill":
-                machine.fill(scanner);
-                break;
-            case "take":
-                machine.take();
-                break;
-            default:
-                System.out.println("Unknown action");
-        }
-
-        machine.printState();
     }
 }
