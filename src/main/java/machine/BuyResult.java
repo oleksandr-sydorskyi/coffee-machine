@@ -1,4 +1,4 @@
-package com.ssa.coffeeMachine;
+package machine;
 
 public enum BuyResult {
     SUCCESS,

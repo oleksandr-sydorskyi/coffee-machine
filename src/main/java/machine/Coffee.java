@@ -1,4 +1,4 @@
-package com.ssa.coffeeMachine;
+package machine;
 
 record Coffee(int water, int milk, int beans, int price) {
 
