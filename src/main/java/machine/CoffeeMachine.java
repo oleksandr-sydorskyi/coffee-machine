@@ -26,7 +26,7 @@ class CoffeeMachine {
             return BuyResult.NEEDS_CLEANING;
         }
 
-        Coffee coffee = Coffee.fromChoice(choice);
+        Coffee coffee = getCoffeeByChoice(choice);
 
         if (coffee == null) {
             return BuyResult.INVALID_CHOICE;
@@ -46,6 +46,15 @@ class CoffeeMachine {
         cupsMade++;
 
         return BuyResult.SUCCESS;
+    }
+
+    private Coffee getCoffeeByChoice(String choice) {
+        return switch (choice) {
+            case "1" -> Coffee.ESPRESSO;
+            case "2" -> Coffee.LATTE;
+            case "3" -> Coffee.CAPPUCCINO;
+            default -> null;
+        };
     }
 
     public void fill(int water, int milk, int beans, int cups) {
